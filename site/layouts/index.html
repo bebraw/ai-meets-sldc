@@ -50,6 +50,9 @@
         root.dataset.theme = theme;
       })();
     </script>
+    <noop &foreach="styles as style">
+      <link &href="style.href" &rel="style.rel" />
+    </noop>
   </head>
   <body class="bg-paper text-ink">
     <div class="min-h-screen overflow-hidden">
@@ -442,134 +445,8 @@
         </p>
       </footer>
     </div>
-    <script>
-      const target = new Date("2026-10-13T09:00:00+03:00");
-      const units = [
-        ["days", 24 * 60 * 60 * 1000],
-        ["hours", 60 * 60 * 1000],
-        ["minutes", 60 * 1000],
-        ["seconds", 1000],
-      ];
-
-      function renderCountdown() {
-        const root = document.querySelector("[data-countdown]");
-
-        if (!root) return;
-
-        let remaining = Math.max(0, target.getTime() - Date.now());
-
-        for (const [name, size] of units) {
-          const value = Math.floor(remaining / size);
-          remaining -= value * size;
-
-          const node = root.querySelector(`[data-countdown-unit="${name}"]`);
-
-          if (node) {
-            node.textContent = String(value).padStart(
-              name === "days" ? 3 : 2,
-              "0",
-            );
-          }
-        }
-      }
-
-      renderCountdown();
-      setInterval(renderCountdown, 1000);
-
-      const themeToggle = document.querySelector("[data-theme-toggle]");
-      const themeLabel = document.querySelector("[data-theme-label]");
-
-      function setTheme(theme) {
-        document.documentElement.classList.toggle("dark", theme === "dark");
-        document.documentElement.dataset.theme = theme;
-
-        if (themeLabel) {
-          themeLabel.textContent = theme === "dark" ? "Light" : "Dark";
-        }
-
-        try {
-          localStorage.setItem("sdlcai-theme", theme);
-        } catch {
-          // Ignore blocked storage.
-        }
-      }
-
-      setTheme(
-        document.documentElement.classList.contains("dark") ? "dark" : "light",
-      );
-
-      themeToggle?.addEventListener("click", () => {
-        setTheme(
-          document.documentElement.classList.contains("dark")
-            ? "light"
-            : "dark",
-        );
-      });
-
-      const turnstileWidget = document.querySelector("[data-turnstile-widget]");
-      const interestForm = document.querySelector("[data-interest-form]");
-      const interestStatus = document.querySelector("[data-interest-status]");
-
-      function setInterestStatus(message) {
-        if (interestStatus) {
-          interestStatus.textContent = message;
-        }
-      }
-
-      function resetTurnstile() {
-        if (window.turnstile && turnstileWidget?.dataset.sitekey) {
-          window.turnstile.reset();
-        }
-      }
-
-      if (
-        turnstileWidget &&
-        (!turnstileWidget.dataset.sitekey ||
-          turnstileWidget.dataset.sitekey === "__TURNSTILE_SITE_KEY__")
-      ) {
-        turnstileWidget.hidden = true;
-      }
-
-      async function submitInterestForm() {
-        const submitButton = interestForm.querySelector("button");
-        submitButton.disabled = true;
-        setInterestStatus("Sending...");
-
-        try {
-          const response = await fetch(interestForm.action, {
-            method: "POST",
-            body: new FormData(interestForm),
-          });
-          const contentType = response.headers.get("content-type") || "";
-          const result = contentType.includes("application/json")
-            ? await response.json()
-            : {
-                error: `${response.status} ${response.statusText || "Unexpected response"}`,
-                detail: await response.text(),
-              };
-
-          if (!response.ok || result.error) {
-            throw new Error(result.error || "Submission failed");
-          }
-
-          interestStatus.textContent =
-            result.message || "Thanks. You are on the list.";
-          interestForm.reset();
-        } catch (error) {
-          setInterestStatus(
-            error instanceof Error ? error.message : "Submission failed",
-          );
-        } finally {
-          resetTurnstile();
-          submitButton.disabled = false;
-        }
-      }
-
-      interestForm?.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        await submitInterestForm();
-      });
-    </script>
+    <noop &foreach="scripts as script">
+      <script &src="script.src" &type="script.type"></script>
+    </noop>
   </body>
 </html>

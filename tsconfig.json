@@ -13,5 +13,9 @@
     "noImplicitOverride": true,
     "types": ["node"]
   },
-  "include": ["worker/**/*.ts", "worker-configuration.d.ts"]
+  "include": [
+    "site/scripts/**/*.ts",
+    "worker/**/*.ts",
+    "worker-configuration.d.ts"
+  ]
 }

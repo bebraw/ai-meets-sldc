@@ -1,6 +1,7 @@
 {
   "/": {
     "layout": "index",
+    "scripts": [{ "name": "index" }],
     "context": {
       "meta": {
         "title": "AI meets SDLC",
