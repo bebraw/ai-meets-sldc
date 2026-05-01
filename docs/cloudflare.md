@@ -75,7 +75,7 @@ Use a strong `EMAIL_ENCRYPTION_KEY` and keep it outside version control. Losing 
 Apply the D1 migration remotely:
 
 ```bash
-wrangler d1 migrations apply ai-meets-sdlc-interests --remote
+npm run db:migrate:remote
 ```
 
 Deploy:

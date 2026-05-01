@@ -5,6 +5,7 @@
   "scripts": {
     "build": "gustwind --build --output ./build --no-incremental",
     "db:migrate:local": "wrangler d1 migrations apply ai-meets-sdlc-interests --local",
+    "db:migrate:remote": "wrangler d1 migrations apply ai-meets-sdlc-interests --remote",
     "dev:env": "node scripts/write-dev-vars.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

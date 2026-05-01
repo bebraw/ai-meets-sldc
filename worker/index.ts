@@ -61,10 +61,7 @@ async function handleInterest(request: Request, env: Env): Promise<Response> {
   const name = normalizeOptionalText(formData.get("name"), 120);
   const organization = normalizeOptionalText(formData.get("organization"), 160);
   const consent = formData.get("consent") === "yes";
-  const turnstileToken = normalizeOptionalText(
-    formData.get("cf-turnstile-response"),
-    4096,
-  );
+  const turnstileToken = getTurnstileToken(formData);
 
   if (!email || !isLikelyEmail(email)) {
     return jsonResponse({ error: "Enter a valid email address" }, 400);
@@ -348,6 +345,15 @@ function normalizeOptionalText(
   if (typeof value !== "string") return "";
 
   return value.trim().slice(0, maxLength);
+}
+
+function getTurnstileToken(formData: FormData): string {
+  const values = formData
+    .getAll("cf-turnstile-response")
+    .map((value) => normalizeOptionalText(value, 2048))
+    .filter(Boolean);
+
+  return values.at(-1) ?? "";
 }
 
 function isLikelyEmail(value: string): boolean {
