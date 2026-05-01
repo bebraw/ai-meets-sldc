@@ -1,4 +1,6 @@
 {
+  "name": "ai-meets-sdlc",
+  "private": true,
   "type": "module",
   "scripts": {
     "build": "gustwind --build --output ./build --no-incremental",
