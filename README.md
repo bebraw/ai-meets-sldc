@@ -1,7 +1,6 @@
 # AI Meets SDLC
 
-Website for the AI meets SDLC seminar, held 13 October 2026 at Marsio
-Saastamoinen Foundation Stage, Espoo, Finland.
+Website for the AI meets SDLC seminar, held 13 October 2026 at Marsio Saastamoinen Foundation Stage, Espoo, Finland.
 
 The site is built with Gustwind and HTMLisp, styled with Tailwind CSS, and
 deployed as a Cloudflare Worker with static assets. The production domain is
