@@ -3,3 +3,7 @@ build/
 .gustwind/
 .wrangler/
 .DS_Store
+.env
+.env.*
+!.env.example
+.dev.vars

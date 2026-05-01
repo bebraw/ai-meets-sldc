@@ -8,6 +8,29 @@
     "directory": "./build",
     "binding": "ASSETS",
   },
+  "vars": {
+    // Public Turnstile site key. Replace this after creating the widget.
+    "TURNSTILE_SITE_KEY": "",
+  },
+  "d1_databases": [
+    {
+      "binding": "INTERESTS",
+      "database_name": "ai-meets-sldc-interests",
+      // Replace after running:
+      // wrangler d1 create ai-meets-sldc-interests
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "r2_buckets": [
+    {
+      "binding": "INTEREST_BACKUPS",
+      "bucket_name": "ai-meets-sldc-interest-backups",
+    },
+  ],
+  "triggers": {
+    "crons": ["17 2 * * *"],
+  },
   "routes": [
     {
       "pattern": "sldcai.org",
