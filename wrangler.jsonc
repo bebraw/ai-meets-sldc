@@ -18,7 +18,7 @@
       "database_name": "ai-meets-sldc-interests",
       // Replace after running:
       // wrangler d1 create ai-meets-sldc-interests
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "970f79a2-d6bd-4632-a2b7-f5c8713083b7",
       "migrations_dir": "migrations",
     },
   ],
