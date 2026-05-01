@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Finlandica Headline";
+  src: url("/assets/fonts/FinlandicaHeadline-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Finlandica Headline";
+  src: url("/assets/fonts/FinlandicaHeadline-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Finlandica Headline";
+  src: url("/assets/fonts/FinlandicaHeadline-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Finlandica Text";
+  src: url("/assets/fonts/FinlandicaText-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Finlandica Text";
+  src: url("/assets/fonts/FinlandicaText-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Finlandica Text";
+  src: url("/assets/fonts/FinlandicaText-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: #f6f4ef;
+    color: #0b0b0b;
+    font-family: "Finlandica Text", Georgia, serif;
+  }
+
+  ::selection {
+    background: #0b0b0b;
+    color: #f6f4ef;
+  }
+}
+
+@layer utilities {
+  .halftone {
+    background-image: radial-gradient(circle, currentColor 1px, transparent 1.2px);
+    background-size: 10px 10px;
+  }
+
+  .halftone-xl {
+    background-image: radial-gradient(circle, currentColor 1.8px, transparent 2px);
+    background-size: 18px 18px;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}

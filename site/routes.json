@@ -1,0 +1,11 @@
+{
+  "/": {
+    "layout": "index",
+    "context": {
+      "meta": {
+        "title": "AI meets SDLC",
+        "description": "A one-day seminar at Marsio Saastamoinen Foundation Stage, Aalto University, on how AI is changing software development lifecycles."
+      }
+    }
+  }
+}

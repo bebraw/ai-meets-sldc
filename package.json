@@ -1,0 +1,22 @@
+{
+  "type": "module",
+  "scripts": {
+    "build": "gustwind --build --output ./build --no-incremental",
+    "start": "gustwind --develop --port 3000",
+    "serve": "gustwind --serve --port 3000 --input ./build",
+    "validate": "gustwind --validate --input ./build",
+    "worker:build": "npm run build",
+    "worker:dev": "npm run worker:build && wrangler dev",
+    "deploy": "npm run worker:build && wrangler deploy"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "@tailwindcss/typography": "0.5.19",
+    "gustwind": "0.109.0"
+  },
+  "devDependencies": {
+    "wrangler": "4.86.0"
+  }
+}
