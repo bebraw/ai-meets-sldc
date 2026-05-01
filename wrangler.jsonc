@@ -31,14 +31,4 @@
   "triggers": {
     "crons": ["17 2 * * *"],
   },
-  "routes": [
-    {
-      "pattern": "sldcai.org",
-      "custom_domain": true,
-    },
-    {
-      "pattern": "www.sldcai.org",
-      "custom_domain": true,
-    },
-  ],
 }
