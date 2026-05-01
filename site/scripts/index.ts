@@ -110,9 +110,8 @@ function initInterestForm() {
   }
 
   async function submitInterestForm() {
-    const submitButton = interestForm.querySelector<HTMLButtonElement>(
-      "button",
-    );
+    const submitButton =
+      interestForm.querySelector<HTMLButtonElement>("button");
 
     if (!submitButton) return;
 

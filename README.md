@@ -101,6 +101,20 @@ Decrypt a downloaded backup with:
 EMAIL_ENCRYPTION_KEY=... npm run interests:decrypt -- backup.json
 ```
 
+Export contact details for follow-up email from production D1 with:
+
+```bash
+EMAIL_ENCRYPTION_KEY=... npm run --silent interests:export -- --remote > contacts.csv
+```
+
+The export script also supports local D1 and downloaded backups:
+
+```bash
+EMAIL_ENCRYPTION_KEY=... npm run --silent interests:export -- --local
+EMAIL_ENCRYPTION_KEY=... npm run --silent interests:export -- --input backup.json
+EMAIL_ENCRYPTION_KEY=... npm run --silent interests:export -- --remote --format json
+```
+
 ## Deployment
 
 Deploy through Cloudflare Workers Builds or locally with:
