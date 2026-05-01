@@ -1,5 +1,22 @@
+type JsonObject = Record<string, unknown>;
+
+interface TurnstileOutcome {
+  success: boolean;
+  "error-codes"?: string[];
+  hostname?: string;
+}
+
+interface EncryptedText {
+  ciphertext: string;
+  iv: string;
+}
+
+interface BackupManifest {
+  rows_hash?: string;
+}
+
 export default {
-  async fetch(request, env) {
+  async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
     if (url.pathname === "/api/interest") {
@@ -19,14 +36,18 @@ export default {
     return response;
   },
 
-  async scheduled(_event, env, ctx) {
+  async scheduled(
+    _event: ScheduledController,
+    env: Env,
+    ctx: ExecutionContext,
+  ): Promise<void> {
     if (!env.INTEREST_BACKUPS) return;
 
     ctx.waitUntil(backupInterests(env));
   },
-};
+} satisfies ExportedHandler<Env>;
 
-async function handleInterest(request, env) {
+async function handleInterest(request: Request, env: Env): Promise<Response> {
   if (!env.INTERESTS) {
     return jsonResponse({ error: "Interest storage is not configured" }, 503);
   }
@@ -126,7 +147,15 @@ async function handleInterest(request, env) {
   });
 }
 
-async function verifyTurnstile({ request, secret, token }) {
+async function verifyTurnstile({
+  request,
+  secret,
+  token,
+}: {
+  request: Request;
+  secret: string;
+  token: string;
+}): Promise<TurnstileOutcome> {
   if (!token) {
     return { success: false, "error-codes": ["missing-input-response"] };
   }
@@ -148,12 +177,12 @@ async function verifyTurnstile({ request, secret, token }) {
       body: payload,
     },
   );
-  const outcome = await response.json();
+  const outcome = (await response.json()) as TurnstileOutcome;
 
   return outcome;
 }
 
-async function backupInterests(env) {
+async function backupInterests(env: Env): Promise<void> {
   const { results } = await env.INTERESTS.prepare(
     "SELECT * FROM interests ORDER BY created_at ASC",
   ).all();
@@ -198,7 +227,9 @@ async function backupInterests(env) {
   );
 }
 
-async function getLatestBackupManifest(env) {
+async function getLatestBackupManifest(
+  env: Env,
+): Promise<BackupManifest | null> {
   const latestBackup = await env.INTEREST_BACKUPS.get("interests/latest.json");
 
   if (!latestBackup) return null;
@@ -208,13 +239,23 @@ async function getLatestBackupManifest(env) {
   }
 
   try {
-    return await latestBackup.json();
+    const manifest = await latestBackup.json();
+
+    return isBackupManifest(manifest) ? manifest : null;
   } catch {
     return null;
   }
 }
 
-async function sha256Hex(value) {
+function isBackupManifest(value: unknown): value is BackupManifest {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    (!("rows_hash" in value) || typeof value.rows_hash === "string")
+  );
+}
+
+async function sha256Hex(value: string): Promise<string> {
   const digest = await crypto.subtle.digest(
     "SHA-256",
     new TextEncoder().encode(value),
@@ -225,7 +266,10 @@ async function sha256Hex(value) {
     .join("");
 }
 
-async function injectRuntimeConfig(response, env) {
+async function injectRuntimeConfig(
+  response: Response,
+  env: Env,
+): Promise<Response> {
   const html = await response.text();
 
   return new Response(
@@ -234,7 +278,10 @@ async function injectRuntimeConfig(response, env) {
   );
 }
 
-async function encryptText(value, keyMaterial) {
+async function encryptText(
+  value: string,
+  keyMaterial: string,
+): Promise<EncryptedText> {
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const key = await importAesKey(keyMaterial);
   const ciphertext = await crypto.subtle.encrypt(
@@ -249,7 +296,7 @@ async function encryptText(value, keyMaterial) {
   };
 }
 
-async function hashEmail(email, keyMaterial) {
+async function hashEmail(email: string, keyMaterial: string): Promise<string> {
   const key = await importHmacKey(keyMaterial);
   const signature = await crypto.subtle.sign(
     "HMAC",
@@ -260,13 +307,13 @@ async function hashEmail(email, keyMaterial) {
   return base64Encode(new Uint8Array(signature));
 }
 
-async function importAesKey(keyMaterial) {
+async function importAesKey(keyMaterial: string): Promise<CryptoKey> {
   const bytes = await deriveBytes(keyMaterial, "email-encryption");
 
   return crypto.subtle.importKey("raw", bytes, "AES-GCM", false, ["encrypt"]);
 }
 
-async function importHmacKey(keyMaterial) {
+async function importHmacKey(keyMaterial: string): Promise<CryptoKey> {
   const bytes = await deriveBytes(keyMaterial, "email-hash");
 
   return crypto.subtle.importKey(
@@ -278,7 +325,10 @@ async function importHmacKey(keyMaterial) {
   );
 }
 
-async function deriveBytes(secret, purpose) {
+async function deriveBytes(
+  secret: string,
+  purpose: string,
+): Promise<ArrayBuffer> {
   const digest = await crypto.subtle.digest(
     "SHA-256",
     new TextEncoder().encode(`${purpose}:${secret}`),
@@ -287,21 +337,24 @@ async function deriveBytes(secret, purpose) {
   return digest;
 }
 
-function normalizeEmail(value) {
+function normalizeEmail(value: FormDataEntryValue | null): string {
   return typeof value === "string" ? value.trim().toLowerCase() : "";
 }
 
-function normalizeOptionalText(value, maxLength) {
+function normalizeOptionalText(
+  value: FormDataEntryValue | null,
+  maxLength: number,
+): string {
   if (typeof value !== "string") return "";
 
   return value.trim().slice(0, maxLength);
 }
 
-function isLikelyEmail(value) {
+function isLikelyEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-function jsonResponse(payload, status = 200) {
+function jsonResponse(payload: JsonObject, status = 200): Response {
   return new Response(JSON.stringify(payload), {
     status,
     headers: {
@@ -310,7 +363,7 @@ function jsonResponse(payload, status = 200) {
   });
 }
 
-function base64Encode(bytes) {
+function base64Encode(bytes: Uint8Array): string {
   let binary = "";
 
   for (const byte of bytes) {

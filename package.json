@@ -9,10 +9,13 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "interests:decrypt": "node scripts/decrypt-interests.mjs",
+    "quality:gate": "npm run worker:build && npm run validate",
     "start": "gustwind --develop --port 3000",
     "serve": "gustwind --serve --port 3000 --input ./build",
+    "types:check": "tsc --noEmit",
+    "types:generate": "wrangler types worker-configuration.d.ts",
     "validate": "gustwind --validate --input ./build",
-    "worker:build": "npm run build && node scripts/verify-build-output.mjs",
+    "worker:build": "npm run types:check && npm run build && node scripts/verify-build-output.mjs",
     "worker:dev": "npm run dev:env && npm run worker:build && wrangler dev",
     "deploy": "npm run worker:build && wrangler deploy"
   },
@@ -24,8 +27,10 @@
     "gustwind": "0.110.0"
   },
   "devDependencies": {
+    "@types/node": "25.6.0",
     "dotenv": "17.4.2",
     "prettier": "3.8.3",
+    "typescript": "6.0.3",
     "wrangler": "4.86.0"
   }
 }
