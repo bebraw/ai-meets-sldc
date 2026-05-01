@@ -4,9 +4,9 @@
   "language": "en",
   "url": "https://sldcai.org",
   "colors": {
-    "ink": "#0b0b0b",
-    "paper": "#f6f4ef",
-    "muted": "#69645d",
+    "ink": "var(--color-ink)",
+    "paper": "var(--color-paper)",
+    "muted": "var(--color-muted)",
     "line": "#d8d2c7",
     "signal": "#d72f2f"
   }

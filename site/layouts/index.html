@@ -21,6 +21,30 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://sldcai.org/og.png" />
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <script>
+      (() => {
+        const root = document.documentElement;
+        let theme = "light";
+
+        try {
+          const stored = localStorage.getItem("sldcai-theme");
+          const prefersDark = matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches;
+          theme =
+            stored === "dark" || stored === "light"
+              ? stored
+              : prefersDark
+                ? "dark"
+                : "light";
+        } catch {
+          theme = "light";
+        }
+
+        root.classList.toggle("dark", theme === "dark");
+        root.dataset.theme = theme;
+      })();
+    </script>
   </head>
   <body class="bg-paper text-ink">
     <div class="min-h-screen overflow-hidden">
@@ -39,7 +63,7 @@
             <img
               src="/assets/logo.svg"
               alt="AI meets SDLC"
-              class="h-10 w-auto"
+              class="h-10 w-auto dark:invert"
             />
           </a>
           <div
@@ -50,6 +74,14 @@
             <a class="hover:underline" href="#speakers">Speakers</a>
             <a class="hover:underline" href="#interest">Interest</a>
           </div>
+          <button
+            class="border border-ink px-3 py-2 text-sm font-bold uppercase transition hover:bg-ink hover:text-paper"
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle dark mode"
+          >
+            <span data-theme-label>Dark</span>
+          </button>
         </nav>
       </header>
 
@@ -92,7 +124,7 @@
 
             <aside class="relative flex flex-col justify-end">
               <div
-                class="border border-ink bg-paper p-5 shadow-[12px_12px_0_#0b0b0b]"
+                class="border border-ink bg-paper p-5 shadow-[12px_12px_0_var(--color-ink)]"
               >
                 <p class="mb-4 font-headline text-sm font-black uppercase">
                   Countdown to seminar
@@ -437,6 +469,36 @@
 
       renderCountdown();
       setInterval(renderCountdown, 1000);
+
+      const themeToggle = document.querySelector("[data-theme-toggle]");
+      const themeLabel = document.querySelector("[data-theme-label]");
+
+      function setTheme(theme) {
+        document.documentElement.classList.toggle("dark", theme === "dark");
+        document.documentElement.dataset.theme = theme;
+
+        if (themeLabel) {
+          themeLabel.textContent = theme === "dark" ? "Light" : "Dark";
+        }
+
+        try {
+          localStorage.setItem("sldcai-theme", theme);
+        } catch {
+          // Ignore blocked storage.
+        }
+      }
+
+      setTheme(
+        document.documentElement.classList.contains("dark") ? "dark" : "light",
+      );
+
+      themeToggle?.addEventListener("click", () => {
+        setTheme(
+          document.documentElement.classList.contains("dark")
+            ? "light"
+            : "dark",
+        );
+      });
 
       const turnstileWidget = document.querySelector("[data-turnstile-widget]");
 

@@ -53,6 +53,16 @@
 @layer base {
   :root {
     color-scheme: light;
+    --color-ink: #0b0b0b;
+    --color-paper: #f6f4ef;
+    --color-muted: #69645d;
+  }
+
+  :root.dark {
+    color-scheme: dark;
+    --color-ink: #f6f4ef;
+    --color-paper: #101010;
+    --color-muted: #b7b0a4;
   }
 
   html {
@@ -61,14 +71,14 @@
 
   body {
     margin: 0;
-    background: #f6f4ef;
-    color: #0b0b0b;
+    background: var(--color-paper);
+    color: var(--color-ink);
     font-family: "Finlandica Text", Georgia, serif;
   }
 
   ::selection {
-    background: #0b0b0b;
-    color: #f6f4ef;
+    background: var(--color-ink);
+    color: var(--color-paper);
   }
 }
 
