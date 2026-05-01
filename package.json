@@ -2,6 +2,8 @@
   "type": "module",
   "scripts": {
     "build": "gustwind --build --output ./build --no-incremental",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "start": "gustwind --develop --port 3000",
     "serve": "gustwind --serve --port 3000 --input ./build",
     "validate": "gustwind --validate --input ./build",
@@ -17,6 +19,7 @@
     "gustwind": "0.109.0"
   },
   "devDependencies": {
+    "prettier": "3.8.3",
     "wrangler": "4.86.0"
   }
 }

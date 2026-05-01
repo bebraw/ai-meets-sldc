@@ -74,12 +74,20 @@
 
 @layer utilities {
   .halftone {
-    background-image: radial-gradient(circle, currentColor 1px, transparent 1.2px);
+    background-image: radial-gradient(
+      circle,
+      currentColor 1px,
+      transparent 1.2px
+    );
     background-size: 10px 10px;
   }
 
   .halftone-xl {
-    background-image: radial-gradient(circle, currentColor 1.8px, transparent 2px);
+    background-image: radial-gradient(
+      circle,
+      currentColor 1.8px,
+      transparent 2px
+    );
     background-size: 18px 18px;
   }
 

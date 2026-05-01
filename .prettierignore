@@ -1,0 +1,6 @@
+node_modules/
+build/
+.gustwind/
+.wrangler/
+assets/
+package-lock.json
